@@ -1,6 +1,7 @@
 //--------    FILE: ros.bhv   -------------
 
 initialize   ACTIVE = false
+initialize   PolyOA = true
 initialize   HELM_MODE = standby
 
 //----------------------------------------------
@@ -53,4 +54,13 @@ Behavior = BHV_Loiter
   visual_hints = edge_color=white, vertex_color=invisible
   visual_hints = edge_size=1, vertex_size=0, label=LOITER_POLYGON
   visual_hints = nextpt_vertex_size=5
+}
+
+//----------------------------------------------
+Behavior=BHV_polyOA
+{
+  name       = poly_OA
+  updates = POLY_UPDATE
+  condition = PolyOA = true
+  pwt        = 100
 }
