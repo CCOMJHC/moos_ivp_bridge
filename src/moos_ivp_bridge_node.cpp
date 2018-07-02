@@ -34,6 +34,8 @@ MutexProtectedBagWriter log_bag;
 MOOS::MOOSAsyncCommClient comms;
 
 bool initializedMOOS = false;
+std::string LatOrigin = "";
+std::string LongOrigin = "";
 
 bool OnConnect(void * param)
 {
@@ -111,23 +113,42 @@ bool OnMail(void *param)
 
 void startMOOS()
 {
+
+  bool hasOrigin = false;
+  while(!hasOrigin){
+    // This sleep is necessary, even in simulation when the "fix" is immediate.
+    ros::Duration(5).sleep();
+    ros::spinOnce();
+    if( (LatOrigin.compare("") != 0) && (LongOrigin.compare("") != 0)) {
+      hasOrigin = true;
+    }
+    ROS_INFO("Waiting for GPS Fix to set Lat/Long Origin...");
+  }
+  ROS_INFO("Have Lat/Lon Origin.");
+  
     std::string missionFileTemplate = ros::package::getPath("moos_ivp_bridge")+"/missions/ros.moos.template";
     std::string bhvFile = ros::package::getPath("moos_ivp_bridge")+"/missions/ros.bhv";
 
     std::ifstream infile(missionFileTemplate);
     std::stringstream incontent;
     incontent << infile.rdbuf();
-    
-    std::regex br("BEHAVIORS");
-    
-    
-    std::string outcontent = std::regex_replace(incontent.str(),br,bhvFile);
 
+    std::cout << std::endl << std::endl;
+    std::cout << "LATORIGIN:" << LatOrigin << std::endl;
+    std::cout << "LONGORIGIN:" << LongOrigin << std::endl;
+
+    // Specify the default IvP Helm bhv file.
+    std::regex br("BEHAVIORS");
+    std::string outcontent = std::regex_replace(incontent.str(),br,bhvFile);
+    // Specify the LatOrigin and LonOrigin, captured from ROS topic /origin
+    std::regex br2("LATLONORIGIN");
+    std::string latlon = "LatOrigin=" + LatOrigin + "\n" + "LongOrigin=" + LongOrigin + "\n";
+    std::string outcontent2 = std::regex_replace(outcontent.c_str(),br2,latlon);
+
+    // Write .moos file.
     std::string missionFile = "ros.moos";
-    
     std::ofstream outfile(missionFile);
-    
-    outfile << outcontent;
+    outfile << outcontent2;
     
     boost::posix_time::ptime now = ros::WallTime::now().toBoost();
     std::string iso_now = std::regex_replace(boost::posix_time::to_iso_extended_string(now),std::regex(":"),"-");
@@ -219,6 +240,12 @@ void originCallback(const geographic_msgs::GeoPoint::ConstPtr& inmsg)
 {
     comms.Notify("LatOrigin", inmsg->latitude);
     comms.Notify("LongOrigin", inmsg->longitude);
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(8) << inmsg->latitude;    
+    LatOrigin = ss.str();
+    ss.str("");
+    ss << std::fixed << std::setprecision(8) << inmsg->longitude;
+    LongOrigin = ss.str();
 }
 
 int main(int argc, char **argv)
@@ -254,10 +281,10 @@ int main(int argc, char **argv)
     comms.SetOnConnectCallBack(OnConnect,&comms);
     
     comms.Run("localhost",9000,"moos_ivp_bridge");
-    
+
     startMOOS();
-    
-    ros::spin();
+    ros::spin();    
+
     
     log_bag.close();
     

@@ -13,20 +13,24 @@ TERM_REPORTING = true
 // Global log root directory
 GlobalLogPath = ./moos/
 
+// Lat and Long Origin
+LATLONORIGIN
+
 //------------------------------------------
 // Antler configuration  block
 ProcessConfig = ANTLER
 {
   MSBetweenLaunches = 200
 
-  //Run = MOOSDB          @ NewConsole = true
-  //Run = pLogger         @ NewConsole = true
-  //Run = pHelmIvP        @ NewConsole = true
-
   Run = MOOSDB          @ NewConsole = false
   Run = pLogger         @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
+<<<<<<< HEAD
   Run = pENC_Contact	@ NewConsole = true
+=======
+  //Run = pENC_Contact	@ NewConsole = true
+  //Run = pENC_Print	@ NewConsole = false
+>>>>>>> latlonOrigin
 
   //Run = uSimMarine	    @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
