@@ -26,14 +26,20 @@ ProcessConfig = ANTLER
   Run = MOOSDB          @ NewConsole = false
   Run = pLogger         @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
+  Run = pENC_Contact	@ NewConsole = true
 
   //Run = uSimMarine	    @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
-  //Run = pMarineViewer	  @ NewConsole = false
+  Run = pMarineViewer	  @ NewConsole = false
   //Run = uProcessWatch	  @ NewConsole = false
-  //Run = pNodeReporter	  @ NewConsole = false
+  Run = pNodeReporter	  @ NewConsole = false
 }
 
+//------------------------------------------------
+#include plug_pENC_Contact.moos
+
+//------------------------------------------------
+#include plug_pENC_Print.moos
 
 //------------------------------------------
 // uProcessWatch config block
