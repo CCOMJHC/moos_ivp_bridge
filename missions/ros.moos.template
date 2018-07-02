@@ -25,12 +25,8 @@ ProcessConfig = ANTLER
   Run = MOOSDB          @ NewConsole = false
   Run = pLogger         @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
-<<<<<<< HEAD
   Run = pENC_Contact	@ NewConsole = true
-=======
-  //Run = pENC_Contact	@ NewConsole = true
   //Run = pENC_Print	@ NewConsole = false
->>>>>>> latlonOrigin
 
   //Run = uSimMarine	    @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
