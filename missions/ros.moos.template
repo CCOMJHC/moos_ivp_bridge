@@ -30,16 +30,20 @@ ProcessConfig = ANTLER
 
   //Run = uSimMarine	    @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
-  Run = pMarineViewer	  @ NewConsole = false
+  //Run = pMarineViewer	  @ NewConsole = false
   //Run = uProcessWatch	  @ NewConsole = false
   Run = pNodeReporter	  @ NewConsole = false
+
+  Run = pShare          @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldNodeBroker  @ NewConsole = false
 }
 
 //------------------------------------------------
 #include plug_pENC_Contact.moos
 
 //------------------------------------------------
-#include plug_pENC_Print.moos
+//include plug_pENC_Print.moos
 
 //------------------------------------------
 // uProcessWatch config block
@@ -211,15 +215,64 @@ ProcessConfig = pMarineViewer
 }
 
 //------------------------------------------
+// Vehicle Communication Config
+//------------------------------------------
+
+//------------------------------------------  
+// pHostInfo
+ProcessConfig = pHostInfo                                       
+{                                                               
+  AppTick   = 8                                                 
+  CommsTick = 8                                                 
+                                                                
+  TEMP_FILE_DIR  = ./ 
+}
+
+//------------------------------------------  
+// uFldNodeBroker
+ProcessConfig = uFldNodeBroker
+{
+  AppTick   = 8
+  CommsTick = 8
+
+  TRY_SHORE_HOST = pshare_route=192.168.88.42:9300
+  BRIDGE = src=BHV_IPF
+  BRIDGE = src=NAV_X, alias=NAV_X
+  BRIDGE = src=NAV_Y, alias=NAV_Y
+  BRIDGE = SRC=NAV_HEADING, alias=NAV_HEADING
+  BRIDGE = src=VIEW_POINT
+  BRIDGE = src=VIEW_SEGLIST
+  BRIDGE = src=APPCAST
+  BRIDGE = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
+  BRIDGE = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
+  BRIDGE = src=VIEW_POLYGON
+  BRIDGE = src=ENC_INIT
+  BRIDGE = src=NEXT_WPT
+}
+
+//------------------------------------------  
+// pShare
+ProcessConfig = pShare
+{
+  AppTick   = 8
+  CommsTick = 8
+
+  Input = route = 192.168.88.7:9301
+}
+
+//------------------------------------------
 // pNodeReporter config block
 
 ProcessConfig = pNodeReporter
 {
-  AppTick    = 2
-  CommsTick	 = 2
+  AppTick    = 4
+  CommsTick  = 4
 
-  platform_type   = KAYAK
+  platform_type   = SHIP
   platform_length = 4
+
+
+  node_report_output = NODE_REPORT_LOCAL
 }
 
 
