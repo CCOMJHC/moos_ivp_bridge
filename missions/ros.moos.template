@@ -25,18 +25,23 @@ ProcessConfig = ANTLER
   Run = MOOSDB          @ NewConsole = false
   Run = pLogger         @ NewConsole = false
   Run = pHelmIvP        @ NewConsole = false
-  Run = pENC_Contact	@ NewConsole = true
-  //Run = pENC_Print	@ NewConsole = false
-
+  Run = pNodeReporter	  @ NewConsole = false
   //Run = uSimMarine	    @ NewConsole = false
   //Run = pMarinePID      @ NewConsole = false
-  //Run = pMarineViewer	  @ NewConsole = false
   //Run = uProcessWatch	  @ NewConsole = false
-  Run = pNodeReporter	  @ NewConsole = false
 
-  Run = pShare          @ NewConsole = false
-  Run = pHostInfo       @ NewConsole = false
-  Run = uFldNodeBroker  @ NewConsole = false
+  // To run pENC_Contact for ENC based hazard avoidance, uncomment these lines.
+  // and the configuration #include blocks below.
+  Run = pENC_Contact	@ NewConsole = true
+  // Run = pENC_Print	@ NewConsole = false  # Currently breaks AMP
+ 
+  // To run pMarineViewer on the ASV, uncomment these lines.
+  // Run = pMarineViewer	  @ NewConsole = false
+
+  // To monitor MOOS via pMarineViewer on a remote operators station, uncomment these lines.
+  // Run = pShare          @ NewConsole = false
+  // Run = pHostInfo       @ NewConsole = false
+  // Run = uFldNodeBroker  @ NewConsole = false
 }
 
 //------------------------------------------------
